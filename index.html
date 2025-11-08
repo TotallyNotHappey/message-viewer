@@ -85,9 +85,9 @@
 <body>
     <div class="container">
         <div class="login-section" id="loginSection">
-            <h1>🔐 Admin Login</h1>
-            <p>Enter password to view messages</p>
-            <input type="password" id="passwordInput" placeholder="Enter admin password">
+            <h1>Login</h1>
+            <p>Enter you're password Happey, if ur someone else then GET OUT!!! i mean you can try guessing my password but eh if you do then im FINDING YOU!!! /j</p>
+            <input type="password" id="passwordInput" placeholder="Password here">
             <div class="error" id="errorMessage"></div>
             <button class="login-btn" onclick="checkPassword()">Login</button>
         </div>
@@ -107,7 +107,7 @@
             const errorElement = document.getElementById('errorMessage');
             
             if (!password) {
-                errorElement.textContent = 'Please enter a password';
+                errorElement.textContent = 'enter the password dumbass';
                 return;
             }
             
@@ -118,7 +118,7 @@
                 document.getElementById('messagesSection').style.display = 'block';
                 loadMessages();
             } else {
-                errorElement.textContent = 'Incorrect password!';
+                errorElement.textContent = 'YOU GUESSED IT WRONG NOOB LOLOL or you forgot your password uh yeah idk';
                 document.getElementById('passwordInput').value = '';
             }
         }
