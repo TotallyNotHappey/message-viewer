@@ -131,25 +131,20 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
         
-        function loadMessages() {
-            const messageList = document.getElementById('messageList');
-            const messages = JSON.parse(localStorage.getItem('github_messages') || '[]');
-            
-            if (messages.length === 0) {
-                messageList.innerHTML = '<p style="text-align: center; color: #00eaff;">No messages yet.</p>';
-                return;
-            }
-            
-            messageList.innerHTML = messages.map(msg => `
-                <div class="message-item">
-                    <div class="message-time">
-                        ${new Date(msg.timestamp).toLocaleString()}
-                    </div>
-                    <div class="message-text">
-                        ${msg.text}
-                    </div>
-                </div>
-            `).join('');
+// In your message-viewer repository
+        async function loadMessages() {
+          try {
+            const response = await fetch('https://api.jsonbin.io/v3/b/690f0603d0ea881f40db400d/latest', {
+              headers: {
+                'X-Master-Key': '$2a$10$sTFAnz5vrgKlNwoQBspbEeNz0f886TJeKFPegiS5eMf0pWjKsFw.m'
+              }
+            });
+            const data = await response.json();
+            const messages = data.record.messages || [];
+            // Display messages...
+          } catch (error) {
+            console.error('Error loading messages:', error);
+          }
         }
         
         function logout() {
