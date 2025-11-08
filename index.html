@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Viewer - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #321e7f, #151b33);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #00eaff;
+            box-shadow: 0 0 20px rgba(0, 234, 255, 0.5);
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        .login-section, .messages-section {
+            text-align: center;
+        }
+        
+        .messages-section {
+            display: none;
+        }
+        
+        h1 {
+            color: #00eaff;
+            margin-bottom: 20px;
+        }
+        
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #00eaff;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 16px;
+        }
+        
+        .login-btn {
+            background: #00eaff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00eaff;
+        }
+        
+        .message-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .message-item {
+            background: rgba(0, 234, 255, 0.1);
+            border: 1px solid #00eaff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .message-time {
+            color: #00eaff;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            color: #00eaff;
+            border: 2px solid #00eaff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .error {
+            color: #ff4444;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <h1>🔐 Login</h1>
+            <p>Enter password to view messages</p>
+            <input type="password" id="passwordInput" placeholder="Enter admin password">
+            <div class="error" id="errorMessage"></div>
+            <button class="login-btn" onclick="checkPassword()">Login</button>
+        </div>
+        
+        <!-- Messages Section -->
+        <div class="messages-section" id="messagesSection">
+            <h1>📨 Received Messages</h1>
+            <div class="message-list" id="messageList">
+                <!-- Messages will appear here -->
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Set your password here
+        const ADMIN_PASSWORD = "Admps29169J@"; // Change this!
+        
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const errorElement = document.getElementById('errorMessage');
+            
+            if (password === ADMIN_PASSWORD) {
+                // Correct password - show messages
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('messagesSection').style.display = 'block';
+                loadMessages();
+            } else {
+                // Wrong password
+                errorElement.textContent = 'Incorrect password!';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+        
+        function loadMessages() {
+            const messageList = document.getElementById('messageList');
+            
+            // For now, we'll use localStorage from the main site
+            // In a real setup, you'd fetch from your database/API
+            const messages = JSON.parse(localStorage.getItem('github_messages') || '[]');
+            
+            if (messages.length === 0) {
+                messageList.innerHTML = '<p>No messages yet.</p>';
+                return;
+            }
+            
+            // Display messages
+            messageList.innerHTML = messages.map(msg => `
+                <div class="message-item">
+                    <div class="message-time">
+                        ${new Date(msg.timestamp).toLocaleString()}
+                    </div>
+                    <div class="message-text">
+                        ${msg.text}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function logout() {
+            document.getElementById('messagesSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMessage').textContent = '';
+        }
+        
+        // Allow Enter key to submit password
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
